@@ -315,28 +315,10 @@ internal sealed class InstallerEngine
             return;
         }
 
-        // Load the built-in INI to check support level
-        var builtInIni = ResourceHelper.ReadText(
-            "RDPWInst.Resources.rdpwrap.ini",
-            Assembly.GetExecutingAssembly()) ?? string.Empty;
-
-        int level = IniHelper.CheckSupportLevel(builtInIni, fv);
-
-        switch (level)
-        {
-            case 0:
-                Console.WriteLine("[-] This version of Terminal Services is not supported.");
-                Console.WriteLine("Try running \"update.bat\" or \"RDPWInst -w\" to download latest INI file.");
-                break;
-            case 1:
-                Console.WriteLine("[!] This version of Terminal Services is supported partially.");
-                Console.WriteLine("It means you may have some limitations such as only 2 concurrent sessions.");
-                Console.WriteLine("Try running \"update.bat\" or \"RDPWInst -w\" to download latest INI file.");
-                break;
-            case 2:
-                Console.WriteLine("[+] This version of Terminal Services is fully supported.");
-                break;
-        }
+        // Support is checked after ExtractFiles(), when the effective INI
+        // (local, embedded, or online) has been selected. Checking the embedded
+        // resource here produces a false "not supported" result whenever a
+        // newer local/online INI contains this termsrv.dll build.
     }
 
     // ── TSConfigRegistry ──────────────────────────────────────────────────────

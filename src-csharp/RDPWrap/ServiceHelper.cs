@@ -186,12 +186,17 @@ public static class ServiceHelper
                     out _, out uint returned, ref resumeHandle, null))
                     return result;
 
-                // ENUM_SERVICE_STATUS_PROCESS layout (Unicode, packed):
+                // ENUM_SERVICE_STATUS_PROCESS layout (Unicode):
                 //   IntPtr  lpServiceName  (pointer to string)
                 //   IntPtr  lpDisplayName  (pointer to string)
                 //   SERVICE_STATUS_PROCESS (9 × DWORD = 36 bytes)
-                int ptrSize   = IntPtr.Size;
-                int entrySize = ptrSize * 2 + 36;   // 2 string pointers + status struct
+                //
+                // The native structure is aligned to pointer size. On x64 the
+                // payload is 52 bytes, but the array stride is 56 bytes.
+                int ptrSize = IntPtr.Size;
+                const int serviceStatusProcessSize = 9 * sizeof(uint);
+                int rawEntrySize = ptrSize * 2 + serviceStatusProcessSize;
+                int entrySize = (rawEntrySize + ptrSize - 1) & ~(ptrSize - 1);
 
                 for (int i = 0; i < (int)returned; i++)
                 {
