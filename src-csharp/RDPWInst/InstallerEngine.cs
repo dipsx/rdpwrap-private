@@ -166,6 +166,10 @@ internal sealed class InstallerEngine
         }
 
         Console.WriteLine("[*] Checking for updates...");
+
+        // Update mode starts from an existing wrapper installation. Keep the
+        // installed ServiceDll path available to offset/INI checks.
+        _wrapPath = _termServicePath;
         return CheckUpdate();
     }
 
