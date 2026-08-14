@@ -452,7 +452,7 @@ internal static class NativeMethods
         uint ObjectType, uint SecurityInfo,
         IntPtr psidOwner, IntPtr psidGroup, IntPtr pDacl, IntPtr pSacl);
 
-    [DllImport(Advapi32, SetLastError = true)]
+    [DllImport(Kernel32, SetLastError = true)]
     internal static extern IntPtr LocalFree(IntPtr hMem);
 
     // ─── winsta.dll ───────────────────────────────────────────────────────────
