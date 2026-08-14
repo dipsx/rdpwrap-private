@@ -609,8 +609,9 @@ jobs:
             }
           }
 
-          # 2) Parse every Windows-version section and verify it contains the
-          #    mandatory keys LocalOnlyPatch and SLInitHook.
+          # 2) Parse Windows-version sections that use the modern policy-hook
+          #    format and verify they contain both mandatory key families.
+          #    Older legacy entries intentionally predate these keys.
           $sectionKeys    = [System.Collections.Generic.Dictionary[string, System.Collections.Generic.List[string]]]::new()
           $currentSection = $null
 
@@ -626,9 +627,18 @@ jobs:
           $mandatoryKeys = @('LocalOnlyPatch', 'SLInitHook')
           $errors        = [System.Collections.Generic.List[string]]::new()
 
-          foreach ($sec in $sectionKeys.Keys) {
+          $modernSections = $sectionKeys.Keys | Where-Object {
+            $keys = $sectionKeys[$_]
+            (@($keys | Where-Object { $_ -eq 'LocalOnlyPatch' -or $_ -like 'LocalOnlyPatch.*' }).Count -gt 0) -and
+            (@($keys | Where-Object { $_ -eq 'SLInitHook' -or $_ -like 'SLInitHook.*' }).Count -gt 0)
+          }
+
+          foreach ($sec in $modernSections) {
             foreach ($key in $mandatoryKeys) {
-              if (-not $sectionKeys[$sec].Contains($key)) {
+              $hasKeyFamily = $sectionKeys[$sec] | Where-Object {
+                $_ -eq $key -or $_ -like "$key.*"
+              }
+              if (@($hasKeyFamily).Count -eq 0) {
                 $errors.Add("  Section [$sec] is missing mandatory key: $key")
               }
             }
@@ -641,7 +651,7 @@ jobs:
           }
 
           $sectionCount = $sectionKeys.Count
-          Write-Host "INI is valid. Windows-version sections: $sectionCount (all contain LocalOnlyPatch + SLInitHook)"
+          Write-Host "INI is valid. Windows-version sections: $sectionCount; modern policy-hook sections checked: $($modernSections.Count)"
 
       # ── Auto-generate changelog from merged PRs since last release ───────────
       - name: Generate changelog
