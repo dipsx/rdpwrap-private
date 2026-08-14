@@ -3,12 +3,6 @@ name: Build and Release
 on:
   push:
     branches: [main, master]
-    paths:
-      - 'msi/rdpwrap.ini'
-      - 'msi/rdpwrap-arm-kb.ini'
-      - 'msi/**'
-      - 'src-x86-x64-Fusix/**'
-      - 'src-csharp/**'
   workflow_dispatch:
     inputs:
       tag:
