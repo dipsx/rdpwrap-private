@@ -17,8 +17,8 @@
   - embedded OffsetFinder/Zydis для официальных сборок без запуска бинарников, скачанных во время установки;
   - ARM64 detection и выбор ARM64 DLL;
   - HTTPS-only downloads, лимит размера ответа, временные файлы и проверка exit code процессов;
-  - дата конфигурации обновлена до `2026-08-14`.
-- Создан свежий исходный архив релиза и приложен к GitHub Release вместе с этим отчётом.
+- Созданы свежие distribution-архивы и опубликованы в GitHub Release вместе с собранными бинарниками.
+- Полный rewrite замержен в `master` приватного репозитория через PR #1; итоговый merge-коммит: `d4e31e9`.
 
 ## Результаты ревью и исправления
 
@@ -31,7 +31,15 @@
 - Проверены уникальность INI-секций и наличие всех добавленных секций.
 - История содержит отдельные merge-коммиты для PR #3398 и полного PR #4062 с hardening-патчами поверх него.
 - Сборка Windows-бинарников в текущем macOS-окружении не запускалась: для неё требуются Windows/MSBuild/Delphi-инструменты. Workflow полного rewrite включены для проверки в GitHub Actions.
-- Релизные workflow полного rewrite включены, но приватный GitHub Release недоступен без авторизации; для unattended deployment следует использовать embedded/offline пакет или внутреннее зеркало через `RDPWRAP_RELEASE_BASE_URL`.
+- Релизные workflow полного rewrite включены. Финальный Windows workflow `31828714509` завершился успешно по всем jobs.
+
+## Свежий артефакт
+
+- Release: https://github.com/dipsx/rdpwrap-private/releases/tag/v2026.08.14-full
+- Включены MSI для x86/x64/ARM64, RDPWInst/RDPConf/RDPCheck, DLL для x86/x64/ARM64, `rdpwrap.ini`, OffsetFinder/Zydis и архивы `RDPWrapper.zip` и `RDPWrapper-SelfContained.zip`.
+- `RDPWrapper.zip` SHA-256: `734996e91258bf962201a38cbc00788277c49b1920ddf76f5a697286d7dc7611`.
+- Артефакт скачан через авторизованный GitHub CLI, ZIP прошёл `unzip -t`, опубликованный `rdpwrap.ini` совпал с рабочим деревом.
+- Для unattended deployment приватный Release требует авторизацию; можно использовать embedded/offline пакет или внутреннее зеркало через `RDPWRAP_RELEASE_BASE_URL`.
 
 ## Ограничение GitHub
 
