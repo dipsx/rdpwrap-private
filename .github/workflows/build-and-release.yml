@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v3
@@ -67,7 +67,7 @@ jobs:
           Get-Item .\rdpwrap_x64.dll, .\rdpwrap_x86.dll, .\rdpwrap_arm64.dll | Format-Table Name, Length
 
       - name: Upload rdpwrap DLLs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: rdpwrap-dlls
           path: |
@@ -87,7 +87,7 @@ jobs:
 
     steps:
       - name: Checkout repository (with submodules)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           submodules: recursive
 
@@ -138,7 +138,7 @@ jobs:
           echo "finder_ver=$version" >> $env:GITHUB_OUTPUT
 
       - name: Upload OffsetFinder binaries
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: offsetfinder-binaries
           path: |
@@ -159,7 +159,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Download rdpWrapper (sergiye)
         id: wrapper
@@ -226,7 +226,7 @@ jobs:
           }
 
       - name: Upload sergiye wrappers
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sergiye-wrappers
           path: |
@@ -245,16 +245,16 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Download rdpwrap DLLs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: rdpwrap-dlls
           path: .
 
       - name: Download OffsetFinder binaries
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: offsetfinder-binaries
           path: .
@@ -280,12 +280,12 @@ jobs:
           Get-ChildItem $res | Format-Table Name, Length
 
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.x'
 
       - name: Cache NuGet packages
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.nuget/packages
           key: nuget-${{ runner.os }}-${{ hashFiles('**/Directory.Build.props', '**/*.csproj') }}
@@ -386,7 +386,7 @@ jobs:
           Remove-Item $pfxPath -Force
 
       - name: Upload C# tools
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: csharp-tools
           path: |
@@ -404,27 +404,27 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Download rdpwrap DLLs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: rdpwrap-dlls
           path: .
 
       - name: Download C# tools
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: csharp-tools
           path: .
 
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.x'
 
       - name: Cache NuGet packages (WiX restore)
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.nuget/packages
           key: nuget-${{ runner.os }}-${{ hashFiles('msi/global.json', 'msi/*.wixproj') }}
@@ -498,7 +498,7 @@ jobs:
           Remove-Item $pfxPath -Force
 
       - name: Upload MSI packages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: msi-packages
           path: RDPWrapper-*-*.msi
@@ -516,34 +516,34 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Download rdpwrap DLLs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: rdpwrap-dlls
           path: .
 
       - name: Download C# tools
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: csharp-tools
           path: .
 
       - name: Download OffsetFinder binaries
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: offsetfinder-binaries
           path: .
 
       - name: Download sergiye wrappers
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: sergiye-wrappers
           path: .
 
       - name: Download MSI packages
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: msi-packages
           path: .
@@ -731,7 +731,7 @@ jobs:
       - name: Publish release
         # Pinned to v2 tag SHA for supply-chain safety.
         # Bump this SHA when upgrading: https://github.com/softprops/action-gh-release/releases
-        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe  # v2
+        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228  # v2
         with:
           tag_name: "${{ steps.meta.outputs.tag_name }}"
           name: "${{ steps.meta.outputs.release_name }}"

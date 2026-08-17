@@ -39,15 +39,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.x'
 
       - name: Cache NuGet packages
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.nuget/packages
           key: nuget-${{ runner.os }}-${{ hashFiles('**/Directory.Build.props', '**/*.csproj') }}
@@ -124,7 +124,7 @@ jobs:
           Copy-Item dist/${{ matrix.platform }}/RDPCheck/RDPCheck.exe  RDPCheck_${{ matrix.platform }}.exe
 
       - name: Upload ${{ matrix.platform }} artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: csharp-tools-${{ matrix.platform }}
           path: |
