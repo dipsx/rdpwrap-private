@@ -1,4 +1,4 @@
-﻿name: Build C++ DLL
+name: Build C++ DLL
 
 # Trigger on:
 #   - PRs targeting main/master that touch C++ source (compile check before merge)
@@ -34,7 +34,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v3
@@ -52,7 +52,7 @@ jobs:
             /p:WindowsTargetPlatformVersion=10.0
 
       - name: Upload ${{ matrix.platform }} artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: rdpwrap-dll-${{ matrix.platform }}
           path: src-x86-x64-Fusix/Release/${{ matrix.platform }}/rdpwrap.dll
